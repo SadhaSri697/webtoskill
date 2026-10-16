@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebToSkill Studio — AI Agent Web-to-Skill Compiler & Studio</title>
+    <meta name="description" content="Turn any website into comprehensive, structured SKILL.md references and element inventories for AI browser agents.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Background glowing ambient lights -->
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="brand">
+                <div class="logo-icon">⚡</div>
+                <div class="brand-text">
+                    <span class="brand-title">WebToSkill</span>
+                    <span class="brand-badge">STUDIO</span>
+                </div>
+            </div>
+
+            <nav class="nav-tabs" role="tablist">
+                <button class="nav-tab active" id="tab-btn-compiler" data-tab="compiler" role="tab" aria-selected="true">
+                    <span class="tab-icon">⚡</span>
+                    <span>Live Compiler</span>
+                </button>
+                <button class="nav-tab" id="tab-btn-explorer" data-tab="explorer" role="tab" aria-selected="false">
+                    <span class="tab-icon">📚</span>
+                    <span>Skill Explorer</span>
+                </button>
+                <button class="nav-tab" id="tab-btn-validator" data-tab="validator" role="tab" aria-selected="false">
+                    <span class="tab-icon">🛡️</span>
+                    <span>Validator</span>
+                </button>
+                <button class="nav-tab" id="tab-btn-simulator" data-tab="simulator" role="tab" aria-selected="false">
+                    <span class="tab-icon">🤖</span>
+                    <span>Agent Simulator</span>
+                </button>
+            </nav>
+
+            <div class="system-status">
+                <span class="status-dot"></span>
+                <span class="status-label" id="backend-status-text">Backend: Online</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+
+        <!-- ================= TAB 1: LIVE COMPILER ================= -->
+        <section id="tab-compiler" class="tab-pane active" role="tabpanel">
+            <div class="hero-section">
+                <div class="hero-pill">Turn Websites into AI Agent Skills</div>
+                <h1 class="hero-title">Compile Any Website into an <span class="gradient-text">Agent Reference</span></h1>
+                <p class="hero-subtitle">
+                    Extract element inventories, resilient selectors, forms, and states into verified <code>SKILL.md</code> specifications ready for browser agents.
+                </p>
+            </div>
+
+            <!-- URL Input Card -->
+            <div class="card glass-card compiler-card">
+                <div class="input-form-group">
+                    <label for="target-url-input" class="input-label">Target Website URL</label>
+                    <div class="input-wrapper">
+                        <span class="url-prefix">https://</span>
+                        <input type="text" id="target-url-input" class="url-input" placeholder="news.ycombinator.com or example.com" value="news.ycombinator.com" autocomplete="off" />
+                        <button id="compile-submit-btn" class="btn btn-primary">
+                            <span class="btn-icon">⚡</span>
+                            <span class="btn-text">Compile Website</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="presets-row">
+                    <span class="preset-label">Quick Presets:</span>
+                    <button class="preset-chip" id="preset-hn" data-url="news.ycombinator.com">Hacker News</button>
+                    <button class="preset-chip" id="preset-example" data-url="example.com">Example.com</button>
+                    <button class="preset-chip" id="preset-github" data-url="github.com">GitHub</button>
+                    <button class="preset-chip" id="preset-wiki" data-url="wikipedia.org">Wikipedia</button>
+                </div>
+            </div>
+
+            <!-- Compiler Live Progress Pipeline (Hidden by default) -->
+            <div id="compiler-progress" class="compiler-progress-container hidden">
+                <div class="pipeline-steps">
+                    <div class="step-item" id="step-fetch">
+                        <div class="step-indicator">1</div>
+                        <div class="step-info">
+                            <div class="step-title">Fetching DOM</div>
+                            <div class="step-sub">Connecting to target host</div>
+                        </div>
+                    </div>
+                    <div class="step-connector"></div>
+                    <div class="step-item" id="step-extract">
+                        <div class="step-indicator">2</div>
+                        <div class="step-info">
+                            <div class="step-title">Extracting Elements</div>
+                            <div class="step-sub">Parsing selectors & forms</div>
+                        </div>
+                    </div>
+                    <div class="step-connector"></div>
+                    <div class="step-item" id="step-generate">
+                        <div class="step-indicator">3</div>
+                        <div class="step-info">
+                            <div class="step-title">Generating SKILL.md</div>
+                            <div class="step-sub">Building route specifications</div>
+                        </div>
+                    </div>
+                    <div class="step-connector"></div>
+                    <div class="step-item" id="step-validate">
+                        <div class="step-indicator">4</div>
+                        <div class="step-info">
+                            <div class="step-title">w2s Validation</div>
+                            <div class="step-sub">Schema compliance check</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Compiler Results Box (Populated on compile) -->
+            <div id="compiler-results" class="results-container hidden">
+                <!-- Summary Stats Bar -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-elements-count">0</div>
+                        <div class="stat-label">Elements Extracted</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-domain-name">-</div>
+                        <div class="stat-label">Compiled Domain</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-files-count">2 Files</div>
+                        <div class="stat-label">Spec Package</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-badge-box">
+                            <span id="stat-validation-badge" class="badge badge-success">VALID ✓</span>
+                        </div>
+                        <div class="stat-label">w2s Format Spec</div>
+                    </div>
+                </div>
+
+                <!-- Sub-tabs for Results View -->
+                <div class="card glass-card">
+                    <div class="card-header-bar">
+                        <div class="sub-tab-group">
+                            <button class="sub-tab active" id="subtab-btn-home" data-subtab="home">home.md</button>
+                            <button class="sub-tab" id="subtab-btn-overview" data-subtab="overview">overview.md</button>
+                            <button class="sub-tab" id="subtab-btn-inventory" data-subtab="inventory">Element Inventory Table</button>
+                        </div>
+                        <button class="btn btn-secondary btn-sm" id="btn-copy-skill">
+                            <span class="btn-icon">📋</span>
+                            <span>Copy Markdown</span>
+                        </button>
+                    </div>
+
+                    <div class="card-body">
+                        <div id="subtab-pane-home" class="subtab-pane active">
+                            <pre class="code-box"><code id="code-preview-home"></code></pre>
+                        </div>
+                        <div id="subtab-pane-overview" class="subtab-pane">
+                            <pre class="code-box"><code id="code-preview-overview"></code></pre>
+                        </div>
+                        <div id="subtab-pane-inventory" class="subtab-pane">
+                            <div class="table-responsive">
+                                <table class="custom-table" id="inventory-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Ref Identifier</th>
+                                            <th>Selector</th>
+                                            <th>Type</th>
+                                            <th>Purpose</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="inventory-table-body">
+                                        <!-- Rows injected dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= TAB 2: SKILL EXPLORER ================= -->
+        <section id="tab-explorer" class="tab-pane" role="tabpanel">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">Skill Library & Specification Explorer</h2>
+                    <p class="section-desc">Browse pre-packaged examples and live compiled skill definitions.</p>
+                </div>
+                <button class="btn btn-secondary btn-sm" id="btn-refresh-skills">
+                    <span class="btn-icon">🔄</span>
+                    <span>Refresh Library</span>
+                </button>
+            </div>
+
+            <div class="explorer-layout">
+                <!-- Sidebar Skills List -->
+                <div class="explorer-sidebar">
+                    <div class="sidebar-title">Available Skills</div>
+                    <div class="skills-list" id="skills-list-container">
+                        <div class="loading-state">Loading skills...</div>
+                    </div>
+                </div>
+
+                <!-- Skill Content Viewer -->
+                <div class="explorer-viewer">
+                    <div class="card glass-card viewer-card">
+                        <div class="viewer-header" id="viewer-header">
+                            <div>
+                                <h3 class="viewer-title" id="viewer-skill-name">Select a skill</h3>
+                                <p class="viewer-meta" id="viewer-skill-meta">Click any skill in the sidebar to inspect its route specifications.</p>
+                            </div>
+                            <div class="viewer-actions" id="viewer-file-selector">
+                                <!-- File pills will be injected here -->
+                            </div>
+                        </div>
+                        <div class="viewer-body">
+                            <pre class="code-box viewer-code"><code id="viewer-file-content">Select a skill on the left to read its markdown content.</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= TAB 3: VALIDATOR ================= -->
+        <section id="tab-validator" class="tab-pane" role="tabpanel">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">w2s Format Validator</h2>
+                    <p class="section-desc">Validate your skill directory against the official <code>w2s</code> format spec using <code>w2s/validate.py</code>.</p>
+                </div>
+            </div>
+
+            <div class="validator-layout">
+                <div class="card glass-card">
+                    <h3 class="card-title">Run Validation Check</h3>
+                    <p class="card-desc">Select a skill directory from your workspace to run the lint validator.</p>
+
+                    <div class="form-group">
+                        <label for="validator-target-select" class="input-label">Select Skill Target</label>
+                        <select id="validator-target-select" class="custom-select">
+                            <option value="w2s/examples/simple-static-site">w2s/examples/simple-static-site</option>
+                            <option value="w2s/examples/complex-spa">w2s/examples/complex-spa</option>
+                            <option value="w2s/examples/web2skill-agent-browser">w2s/examples/web2skill-agent-browser</option>
+                        </select>
+                    </div>
+
+                    <button id="btn-run-validation" class="btn btn-primary">
+                        <span class="btn-icon">🛡️</span>
+                        <span>Run w2s Validator</span>
+                    </button>
+                </div>
+
+                <!-- Validation Output Card -->
+                <div class="card glass-card validator-report-card">
+                    <div class="report-header">
+                        <div class="report-title-row">
+                            <h3 class="card-title">Validation Report</h3>
+                            <span id="validator-status-badge" class="badge badge-neutral">Ready</span>
+                        </div>
+                        <p class="report-summary" id="validator-summary-text">Click "Run w2s Validator" to perform schema analysis.</p>
+                    </div>
+
+                    <div class="report-body" id="validator-details-container">
+                        <div class="empty-state">No validation checks run yet.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= TAB 4: AGENT SIMULATOR ================= -->
+        <section id="tab-simulator" class="tab-pane" role="tabpanel">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">AI Agent Automation Simulator</h2>
+                    <p class="section-desc">Simulate an agent referencing a compiled skill to resolve precise DOM selectors and execute tasks without hallucination.</p>
+                </div>
+            </div>
+
+            <div class="simulator-layout">
+                <!-- Simulator Form Card -->
+                <div class="card glass-card">
+                    <h3 class="card-title">Agent Execution Goal</h3>
+                    <p class="card-desc">Choose a skill reference and give the agent a natural language instruction.</p>
+
+                    <div class="form-group">
+                        <label for="sim-skill-select" class="input-label">Reference Skill</label>
+                        <select id="sim-skill-select" class="custom-select">
+                            <option value="simple-static-site">simple-static-site (Marketing Site)</option>
+                            <option value="complex-spa">complex-spa (Project Management SPA)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sim-task-input" class="input-label">User Goal / Instruction</label>
+                        <input type="text" id="sim-task-input" class="custom-input" placeholder="e.g. Sign in to my account, or create a new issue" value="Sign in to my account" />
+                    </div>
+
+                    <div class="presets-row">
+                        <span class="preset-label">Suggested Goals:</span>
+                        <button class="preset-chip sim-preset" data-task="Sign in to my account">Sign In</button>
+                        <button class="preset-chip sim-preset" data-task="Navigate to pricing page">View Pricing</button>
+                        <button class="preset-chip sim-preset" data-task="Create new issue in project">Create Issue</button>
+                    </div>
+
+                    <button id="btn-run-simulation" class="btn btn-primary" style="margin-top: 1.5rem;">
+                        <span class="btn-icon">🤖</span>
+                        <span>Simulate Agent Reasoning</span>
+                    </button>
+                </div>
+
+                <!-- Simulation Output -->
+                <div class="card glass-card">
+                    <div class="report-header">
+                        <h3 class="card-title">Agent Execution Trace</h3>
+                        <p class="report-summary" id="sim-summary-text">Shows element selector resolution and generated Playwright script.</p>
+                    </div>
+
+                    <div id="sim-results-box" class="sim-results-box">
+                        <div class="empty-state">Enter a goal and click Simulate to see how the agent uses the reference.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <div class="footer-container">
+            <div>WebToSkill Studio • Powered by <code>web2skill</code> open specification</div>
+            <div class="footer-links">
+                <a href="#tab-compiler" class="footer-link">Live Compiler</a>
+                <a href="#tab-explorer" class="footer-link">Explorer</a>
+                <a href="#tab-validator" class="footer-link">Validator</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
