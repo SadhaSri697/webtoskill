@@ -23,6 +23,23 @@ is a separate downstream project that reads this reference.
 
 ---
 
+## ⚡ WebToSkill Studio (Interactive Web Application)
+
+WebToSkill comes with a fullstack web UI to compile websites, explore element inventories, run schema validation, and simulate AI agents visually.
+
+### Run WebToSkill Studio locally:
+
+```bash
+git clone https://github.com/SadhaSri697/webtoskill.git
+cd webtoskill
+pip install -r requirements.txt
+python run.py
+```
+
+Then visit **`http://localhost:5000`** in your browser.
+
+---
+
 ## One-prompt setup
 
 Don't want to do this manually? Give this prompt to your agent — it will set everything up for you:
@@ -108,7 +125,7 @@ The fastest path from zero to a working compiled skill.
 ### 1. Install w2s into your agent
 
 ```bash
-git clone https://github.com/jitesh-ss/webtoskill.git
+git clone https://github.com/SadhaSri697/webtoskill.git
 mkdir -p ~/.claude/skills
 cp -r web2skill/w2s ~/.claude/skills/web2skill
 ```
@@ -214,7 +231,7 @@ offers."
 ### Claude Code
 
 ```bash
-git clone https://github.com/jitesh-ss/webtoskill.git
+git clone https://github.com/SadhaSri697/webtoskill.git
 mkdir -p ~/.claude/skills
 cp -r web2skill/w2s ~/.claude/skills/web2skill
 ```
@@ -226,7 +243,7 @@ Restart Claude Code. The `web2skill` skill is now available — you should see i
 Codex CLI looks for skills in `~/.codex/skills/`:
 
 ```bash
-git clone https://github.com/jitesh-ss/webtoskill.git
+git clone https://github.com/SadhaSri697/webtoskill.git
 mkdir -p ~/.codex/skills
 cp -r web2skill/w2s ~/.codex/skills/web2skill
 ```
